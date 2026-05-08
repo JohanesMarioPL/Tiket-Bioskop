@@ -2,6 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Analytics\AnalyticsController;
+use App\Http\Controllers\Admin\Management\LocationController;
+use App\Http\Controllers\Admin\Management\MoviesController;
+use App\Http\Controllers\Admin\Management\ReviewsController;
+use App\Http\Controllers\Admin\Management\ScheduleController;
+use App\Http\Controllers\Admin\Management\SeatsController;
+use App\Http\Controllers\Admin\Management\StudioController;
+use App\Http\Controllers\Admin\Management\TicketController;
+use App\Http\Controllers\Admin\UserManagement\UserController;
+use App\Http\Controllers\Admin\Management\TransactionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,6 +25,82 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('admin-dashboard')->name('admin.')->group(function () {
+    Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard');
+
+    Route::prefix('movies')->name('movies.')->group(function () {
+        Route::get('/', [MoviesController::class, 'index'])->name('index');
+        Route::get('/create', [MoviesController::class, 'create'])->name('create');
+        Route::post('/', [MoviesController::class, 'store'])->name('store');
+        Route::get('/{movie}', [MoviesController::class, 'show'])->name('show');
+        Route::get('/{movie}/edit', [MoviesController::class, 'edit'])->name('edit');
+        Route::put('/{movie}', [MoviesController::class, 'update'])->name('update');
+        Route::delete('/{movie}', [MoviesController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('reviews')->name('reviews.')->group(function () {
+        Route::get('/', [ReviewsController::class, 'index'])->name('index');
+        Route::delete('/{review}', [ReviewsController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('locations')->name('locations.')->group(function () {
+        Route::get('/', [LocationController::class, 'index'])->name('index');
+        Route::get('/create', [LocationController::class, 'create'])->name('create');
+        Route::post('/', [LocationController::class, 'store'])->name('store');
+        Route::get('/{location}', [LocationController::class, 'show'])->name('show');
+        Route::get('/{location}/edit', [LocationController::class, 'edit'])->name('edit');
+        Route::put('/{location}', [LocationController::class, 'update'])->name('update');
+        Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('studios')->name('studios.')->group(function () {
+        Route::get('/', [StudioController::class, 'index'])->name('index');
+        Route::get('/create', [StudioController::class, 'create'])->name('create');
+        Route::post('/', [StudioController::class, 'store'])->name('store');
+        Route::get('/{studio}', [StudioController::class, 'show'])->name('show');
+        Route::get('/{studio}/edit', [StudioController::class, 'edit'])->name('edit');
+        Route::put('/{studio}', [StudioController::class, 'update'])->name('update');
+        Route::delete('/{studio}', [StudioController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('seats')->name('seats.')->group(function () {
+        Route::get('/', [SeatsController::class, 'index'])->name('index');
+        Route::get('/create', [SeatsController::class, 'create'])->name('create');
+        Route::post('/', [SeatsController::class, 'store'])->name('store');
+        Route::get('/{seat}', [SeatsController::class, 'show'])->name('show');
+        Route::get('/{seat}/edit', [SeatsController::class, 'edit'])->name('edit');
+        Route::put('/{seat}', [SeatsController::class, 'update'])->name('update');
+        Route::delete('/{seat}', [SeatsController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('showtimes')->name('showtimes.')->group(function () {
+        Route::get('/', [ScheduleController::class, 'index'])->name('index');
+        Route::get('/create', [ScheduleController::class, 'create'])->name('create');
+        Route::post('/', [ScheduleController::class, 'store'])->name('store');
+        Route::get('/{schedule}', [ScheduleController::class, 'show'])->name('show');
+        Route::get('/{schedule}/edit', [ScheduleController::class, 'edit'])->name('edit');
+        Route::put('/{schedule}', [ScheduleController::class, 'update'])->name('update');
+        Route::delete('/{schedule}', [ScheduleController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('transactions')->name('transactions.')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('index');
+        Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
+        Route::post('/{transaction}', [TransactionController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 require __DIR__.'/auth.php';
