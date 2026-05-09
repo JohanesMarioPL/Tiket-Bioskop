@@ -1,6 +1,6 @@
 <aside class="w-64 h-screen bg-[#344152] border-r border-[#475569] transition-transform -translate-x-full md:translate-x-0 flex flex-col fixed z-20 shadow-xl" aria-label="Sidenav">
     <div class="flex items-center justify-center pt-8 pb-6 mb-2 border-b border-[#475569]">
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
+        <a href="{{ route('admin.analytics.index') }}" class="flex items-center gap-3">
             <svg class="w-8 h-8 text-[#cbdfea]" fill="currentColor" viewBox="0 0 24 24"><path d="M19.82 2H4.18C2.97 2 2 2.97 2 4.18v15.64C2 21.03 2.97 22 4.18 22h15.64c1.21 0 2.18-.97 2.18-2.18V4.18C22 2.97 21.03 2 19.82 2zM4 5.5h3v2H4v-2zm0 5h3v2H4v-2zm0 5h3v2H4v-2zm16 4.5H4v-2h16v2zm0-5h-3v-2h3v2zm0-5h-3v-2h3v2zm0-5h-3v-2h3v2z"/></svg>
             <span class="text-xl font-bold text-white tracking-wider">ADMIN<span class="text-[#cbdfea]">BIOSKOP</span></span>
         </a>
@@ -9,7 +9,7 @@
     <div class="overflow-y-auto px-4 py-4 h-full flex-1">
         <ul class="space-y-2 font-medium">
             <li>
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-[#cbdfea] text-[#344152] shadow-md font-bold' : 'text-slate-300 hover:text-white hover:bg-[#475569]' }}">
+                <a href="{{ route('admin.analytics.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.analytics.index') ? 'bg-[#cbdfea] text-[#344152] shadow-md font-bold' : 'text-slate-300 hover:text-white hover:bg-[#475569]' }}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     <span>Dashboard</span>
                 </a>

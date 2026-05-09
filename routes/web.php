@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin-dashboard')->name('admin.')->group(function () {
-    Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard');
+    Route::get('/', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/export', [AnalyticsController::class, 'exportPDF'])->name('analytics.export');
 
     Route::prefix('movies')->name('movies.')->group(function () {
         Route::get('/', [MoviesController::class, 'index'])->name('index');
