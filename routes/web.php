@@ -56,7 +56,7 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
         Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('studios')->name('studios.')->group(function () {
+    Route::prefix('studio')->name('studio.')->group(function () {
         Route::get('/', [StudioController::class, 'index'])->name('index');
         Route::get('/create', [StudioController::class, 'create'])->name('create');
         Route::post('/', [StudioController::class, 'store'])->name('store');
@@ -64,16 +64,6 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
         Route::get('/{studio}/edit', [StudioController::class, 'edit'])->name('edit');
         Route::put('/{studio}', [StudioController::class, 'update'])->name('update');
         Route::delete('/{studio}', [StudioController::class, 'destroy'])->name('destroy');
-    });
-
-    Route::prefix('seats')->name('seats.')->group(function () {
-        Route::get('/', [SeatsController::class, 'index'])->name('index');
-        Route::get('/create', [SeatsController::class, 'create'])->name('create');
-        Route::post('/', [SeatsController::class, 'store'])->name('store');
-        Route::get('/{seat}', [SeatsController::class, 'show'])->name('show');
-        Route::get('/{seat}/edit', [SeatsController::class, 'edit'])->name('edit');
-        Route::put('/{seat}', [SeatsController::class, 'update'])->name('update');
-        Route::delete('/{seat}', [SeatsController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('showtimes')->name('showtimes.')->group(function () {

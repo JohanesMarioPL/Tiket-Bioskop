@@ -37,7 +37,7 @@
             </li>
 
             <li>
-                <a href="{{ route('admin.studios.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.studios.*') ? 'bg-[#cbdfea] text-[#344152] shadow-md font-bold' : 'text-slate-300 hover:text-white hover:bg-[#475569]' }}">
+                <a href="{{ route('admin.studio.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.studio.*') ? 'bg-[#cbdfea] text-[#344152] shadow-md font-bold' : 'text-slate-300 hover:text-white hover:bg-[#475569]' }}">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     <span>Manajemen Studio</span>
                 </a>
