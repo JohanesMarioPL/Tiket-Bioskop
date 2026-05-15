@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reservation extends Model
 {
+    protected $table = 'seat_reservations';
     protected $fillable = ['ticket_id', 'seat_id'];
 
     public function ticket(): BelongsTo
