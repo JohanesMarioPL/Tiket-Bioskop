@@ -4,7 +4,7 @@
 @section('header', 'Tambah Jadwal Tayang')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-full mx-auto">
     
     <div class="mb-6">
         <a href="{{ route('admin.showtimes.index') }}" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
