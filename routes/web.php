@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.starter');
 });
 
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
