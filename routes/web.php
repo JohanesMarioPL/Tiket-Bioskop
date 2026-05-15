@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Analytics\AnalyticsController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\Admin\Management\TransactionController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

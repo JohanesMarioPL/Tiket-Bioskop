@@ -2,20 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Movie extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['title', 'description', 'genre', 'duration_minutes', 'rating_age', 'poster_url'];
 
-    public function schedules(): HasMany
+    public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        return $this->hasMany(Schedule::class);
+        if ($search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+        return $query;
     }
 
-    public function reviews(): HasMany
+    public function scopeFilterGenre(Builder $query, ?string $genre): Builder
     {
-        return $this->hasMany(Review::class);
+        if ($genre) {
+            $query->where('genre', $genre);
+        }
+        return $query;
+    }
+
+    public function scopeFilterRating(Builder $query, ?string $rating): Builder
+    {
+        if ($rating) {
+            $query->where('rating_age', $rating);
+        }
+        return $query;
     }
 }
