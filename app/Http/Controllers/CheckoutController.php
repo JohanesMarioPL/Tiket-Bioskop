@@ -50,7 +50,7 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            return redirect()->route('ticket.show', $transaction->transaction_code);
+            return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi! Kode Booking: ' . $transaction->transaction_code);
         });
     }
 }

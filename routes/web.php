@@ -22,7 +22,6 @@ Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 Route::get('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
-Route::get('/ticket/{transaction}', [App\Http\Controllers\TicketController::class, 'show'])->name('ticket.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

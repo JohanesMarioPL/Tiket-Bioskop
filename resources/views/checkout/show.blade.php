@@ -79,6 +79,12 @@
 
     <main class="flex-1 px-6">
         <div class="checkout-container">
+            @if(session('success'))
+                <div class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm font-bold">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
             <h2 class="text-2xl font-black mb-2">Konfirmasi Pesanan</h2>
             <p class="text-sm text-slate-400 mb-8">Pilih jumlah tiket yang ingin Anda beli.</p>
 
