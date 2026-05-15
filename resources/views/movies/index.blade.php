@@ -171,9 +171,9 @@
                             </p>
 
                             <div class="pt-4 border-t flex justify-end" style="border-color: var(--gray);">
-                                <button class="text-[11px] font-bold px-5 py-2 rounded-lg text-white" style="background-color: var(--brown);">
+                                <a href="{{ route('movies.show', $movie) }}" class="text-[11px] font-bold px-5 py-2 rounded-lg text-white" style="background-color: var(--brown);">
                                     Detail
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
