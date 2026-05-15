@@ -63,14 +63,24 @@ https://templatemo.com/tm-570-chain-app-dev
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li>
-                <div class="gradient-button"><a id="login_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Login</a></div>
-              </li>
-              </ul>
-            <ul class="nav">
-              <li>
-                <div class="gradient-button"><a id="register_trigger" href="#modal"><i class="fa fa-user-plus"></i> Register</a></div>
-              </li>
+              @auth
+                <li>
+                  <div class="gradient-button"><a href="{{ route('dashboard') }}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></div>
+                </li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
+                    @csrf
+                  </form>
+                  <div class="gradient-button"><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out-alt"></i> Logout</a></div>
+                </li>
+              @else
+                <li>
+                  <div class="gradient-button"><a id="login_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> Login</a></div>
+                </li>
+                <li>
+                  <div class="gradient-button"><a id="register_trigger" href="#modal"><i class="fa fa-user-plus"></i> Register</a></div>
+                </li>
+              @endauth
             </ul>
             <a class='menu-trigger'>
               <span>Menu</span>
@@ -118,24 +128,30 @@ https://templatemo.com/tm-570-chain-app-dev
 
       <!-- Username & Password Login form -->
       <div class="user_login">
-        <form>
-          <label>Email / Username</label>
-          <input type="text" />
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('status')" />
+
+        <form method="POST" action="{{ route('login') }}">
+          @csrf
+          <label>Email Address</label>
+          <input type="email" name="email" value="{{ old('email') }}" required autofocus />
+          <x-input-error :messages="$errors->get('email')" class="mt-2" />
           <br />
 
           <label>Password</label>
-          <input type="password" />
+          <input type="password" name="password" required autocomplete="current-password" />
+          <x-input-error :messages="$errors->get('password')" class="mt-2" />
           <br />
 
           <div class="checkbox">
-            <input id="remember" type="checkbox" />
+            <input id="remember" type="checkbox" name="remember" />
             <label for="remember">Remember me on this computer</label>
           </div>
 
           <div class="action_btns">
             <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a>
             </div>
-            <div class="one_half last"><a href="#" class="btn btn_red">Login</a></div>
+            <div class="one_half last"><button type="submit" class="btn btn_red">Login</button></div>
           </div>
         </form>
 
@@ -144,17 +160,26 @@ https://templatemo.com/tm-570-chain-app-dev
 
       <!-- Register Form -->
       <div class="user_register">
-        <form>
+        <form method="POST" action="{{ route('register') }}">
+          @csrf
           <label>Full Name</label>
-          <input type="text" />
+          <input type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" />
+          <x-input-error :messages="$errors->get('name')" class="mt-2" />
           <br />
 
           <label>Email Address</label>
-          <input type="email" />
+          <input type="email" name="email" value="{{ old('email') }}" required autocomplete="username" />
+          <x-input-error :messages="$errors->get('email')" class="mt-2" />
           <br />
 
           <label>Password</label>
-          <input type="password" />
+          <input type="password" name="password" required autocomplete="new-password" />
+          <x-input-error :messages="$errors->get('password')" class="mt-2" />
+          <br />
+
+          <label>Confirm Password</label>
+          <input type="password" name="password_confirmation" required autocomplete="new-password" />
+          <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
           <br />
 
           <div class="checkbox">
@@ -165,7 +190,7 @@ https://templatemo.com/tm-570-chain-app-dev
           <div class="action_btns">
             <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left"></i> Back</a>
             </div>
-            <div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+            <div class="one_half last"><button type="submit" class="btn btn_red">Register</button></div>
           </div>
         </form>
       </div>
