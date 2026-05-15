@@ -18,7 +18,10 @@ class DatabaseSeeder extends Seeder
         // Add manual user seeds here if needed:
         // DB::table('users')->insert([...]);
 
-        $this->call(MovieSeeder::class);
+        $this->call([
+            MovieSeeder::class,
+            ScheduleSeeder::class,
+        ]);
     }
 }
 

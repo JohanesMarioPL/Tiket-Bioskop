@@ -310,7 +310,7 @@
                                     Rp {{ number_format($schedule->base_price, 0, ',', '.') }}
                                 </div>
                             </div>
-                            <a href="#" class="btn-primary">
+                            <a href="{{ route('checkout.show', $schedule) }}" class="btn-primary">
                                 Beli Tiket
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
