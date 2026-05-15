@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController;
+use App\Http\Controllers\User\ReviewController;
 
 Route::get('/', function () {
     return view('layouts.starter');
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/my-reviews', [ReviewController::class, 'index'])->name('user.reviews.index');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::prefix('admin-dashboard')->name('admin.')->group(function () {
     Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard');
 
