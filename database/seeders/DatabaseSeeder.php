@@ -18,6 +18,19 @@ class DatabaseSeeder extends Seeder
         // Add manual user seeds here if needed:
         // DB::table('users')->insert([...]);
 
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Regular User',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'user',
+        ]);
         $this->call(MovieSeeder::class);
     }
 }
