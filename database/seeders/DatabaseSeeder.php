@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // User::factory() removed — User model does not use HasFactory.
+        // Add manual user seeds here if needed:
+        // DB::table('users')->insert([...]);
 
         User::factory()->create([
             'name' => 'Admin User',
@@ -30,5 +31,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'user',
         ]);
+        $this->call(MovieSeeder::class);
     }
 }
+

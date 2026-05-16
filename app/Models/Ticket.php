@@ -18,10 +18,10 @@ class Ticket extends Model
     public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
-    }
+    }   
 
     public function reservation(): HasOne
     {
-        return $this->hasOne(SeatReservation::class);
+        return $this->hasOne(Reservation::class);
     }
 }
