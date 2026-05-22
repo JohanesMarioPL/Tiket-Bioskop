@@ -13,13 +13,20 @@ use App\Http\Controllers\Admin\Management\SeatsController;
 use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
-use App\Http\Controllers\Admin\Management\TransactionController;
+use App\Http\Controllers\Admin\Management\TransactionController as AdminTransactionController;
 
 Route::get('/', function () {
     return view('layouts.starter');
 });
 
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/booking/{schedule}', [App\Http\Controllers\BookingController::class, 'show'])->name('booking.show');
+Route::get('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/payment/{transaction}', [App\Http\Controllers\PaymentController::class, 'show'])->name('payment.show');
+Route::post('/payment/{transaction}', [App\Http\Controllers\PaymentController::class, 'simulate'])->name('payment.simulate');
+Route::get('/ticket/{transaction}', [App\Http\Controllers\TicketController::class, 'show'])->name('ticket.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -92,9 +99,9 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
     });
 
     Route::prefix('transactions')->name('transactions.')->group(function () {
-        Route::get('/', [TransactionController::class, 'index'])->name('index');
-        Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
-        Route::post('/{transaction}', [TransactionController::class, 'update'])->name('update');
+        Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
+        Route::get('/{transaction}', [AdminTransactionController::class, 'show'])->name('show');
+        Route::post('/{transaction}', [AdminTransactionController::class, 'update'])->name('update');
     });
 
     Route::prefix('users')->name('users.')->group(function () {

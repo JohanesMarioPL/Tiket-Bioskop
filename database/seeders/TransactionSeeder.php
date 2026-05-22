@@ -58,7 +58,7 @@ class TransactionSeeder extends Seeder
             'transaction_code' => 'TX' . strtoupper(Str::random(8)),
             'total_amount' => 55000,
             'service_fee' => 5000,
-            'status' => 'success'
+            'status' => 'paid'
         ]);
 
         Ticket::create([
