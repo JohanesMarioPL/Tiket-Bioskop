@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Factories\TicketFactory;
 use App\Models\Schedule;
 use App\Models\Transaction;
-use App\Models\Ticket;
 use App\Models\Seat;
-use App\Models\Reservation;
+use App\Services\Pricing\BaseTicketPrice;
+use App\Services\Pricing\ServiceFeeDecorator;
+use App\Services\Pricing\TaxDecorator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,19 +16,48 @@ use Illuminate\Support\Str;
 class CheckoutController extends Controller
 {
     /**
+     * Bangun decorator chain untuk perhitungan harga tiket.
+     *
+     * Decorator Pattern – penggunaan:
+     *   BaseTicketPrice          (komponen dasar)
+     *     └─ ServiceFeeDecorator (+ biaya layanan)
+     *         └─ TaxDecorator    (+ pajak 5%)
+     *
+     * Untuk menambah/hapus komponen harga, cukup tambah/hapus satu baris
+     * tanpa mengubah kelas yang sudah ada.
+     *
+     * @param int $basePrice  Harga dasar per tiket
+     * @param int $quantity   Jumlah tiket
+     * @return \App\Services\Pricing\TicketPricingInterface
+     */
+    private function buildPricingChain(int $basePrice, int $quantity)
+    {
+        // Layer 1 – Komponen dasar (ConcreteComponent)
+        $pricing = new BaseTicketPrice($basePrice, $quantity);
+
+        // Layer 2 – Dekorator biaya layanan
+        $pricing = new ServiceFeeDecorator($pricing, $quantity);
+
+        // Layer 3 – Dekorator pajak 5%
+        $pricing = new TaxDecorator($pricing, 0.05);
+
+        return $pricing;
+    }
+
+    /**
      * Show the order summary / checkout confirmation page.
      */
     public function show(Request $request, Schedule $schedule)
     {
         $seatIdsStr = $request->query('seat_ids');
-        
+
         if (!$seatIdsStr) {
             return redirect()->route('booking.show', $schedule)
                 ->with('error', 'Silakan pilih kursi terlebih dahulu.');
         }
 
         $seatIds = explode(',', $seatIdsStr);
-        $seats = Seat::whereIn('id', $seatIds)->get();
+        $seats   = Seat::whereIn('id', $seatIds)->get();
 
         if ($seats->isEmpty()) {
             return redirect()->route('booking.show', $schedule)
@@ -34,73 +65,89 @@ class CheckoutController extends Controller
         }
 
         $schedule->load(['movie', 'studio.location']);
-        
-        $quantity = $seats->count();
-        $basePrice = $schedule->base_price;
-        $serviceFee = 2000 * $quantity;
-        $totalAmount = ($basePrice * $quantity) + $serviceFee;
 
-        return view('checkout.show', compact('schedule', 'seats', 'quantity', 'serviceFee', 'totalAmount', 'seatIdsStr'));
+        $quantity  = $seats->count();
+        $basePrice = $schedule->base_price;
+
+        // Decorator Pattern – bangun chain dan hitung total
+        $pricing     = $this->buildPricingChain($basePrice, $quantity);
+        $totalAmount = $pricing->calculate();
+        $breakdown   = $pricing->getBreakdown();
+
+        // Hitung nilai individual untuk view (backward compat)
+        $serviceFee = 2000 * $quantity;
+        $taxAmount  = $totalAmount - ($basePrice * $quantity) - $serviceFee;
+
+        return view('checkout.show', compact(
+            'schedule', 'seats', 'quantity',
+            'serviceFee', 'taxAmount', 'totalAmount',
+            'breakdown', 'seatIdsStr'
+        ));
     }
 
     /**
-     * Process checkout submission: create transaction, tickets, and seat reservations.
+     * Process checkout: buat transaksi, tiket (via Factory), dan reservasi kursi.
+     *
+     * Menggunakan:
+     * - Decorator Pattern untuk menghitung harga akhir
+     * - Factory Pattern untuk membuat tiket sesuai rating film
      */
     public function store(Request $request, Schedule $schedule)
     {
         $request->validate([
-            'seat_ids' => 'required|string',
+            'seat_ids'       => 'required|string',
             'payment_method' => 'required|string|in:gopay,ovo,dana,bca_va,mandiri_va,bni_va,credit_card',
         ]);
 
         $seatIds = explode(',', $request->seat_ids);
-        $seats = Seat::whereIn('id', $seatIds)->get();
+        $seats   = Seat::whereIn('id', $seatIds)->get();
 
         if ($seats->isEmpty()) {
             return redirect()->route('booking.show', $schedule)
                 ->with('error', 'Pilihan kursi tidak valid.');
         }
 
-        $quantity = $seats->count();
-        $basePrice = $schedule->base_price;
-        $serviceFee = 2000 * $quantity;
-        $totalAmount = ($basePrice * $quantity) + $serviceFee;
+        // Load movie agar TicketFactory bisa membaca rating_age
+        $schedule->load('movie');
 
-        // DB Transaction to store everything atomically
-        $transaction = DB::transaction(function () use ($schedule, $seats, $quantity, $basePrice, $serviceFee, $totalAmount, $request) {
-            // Create Transaction in 'pending' status
+        $quantity  = $seats->count();
+        $basePrice = $schedule->base_price;
+
+        // Decorator Pattern – hitung total dari chain
+        $pricing        = $this->buildPricingChain($basePrice, $quantity);
+        $totalAmount    = $pricing->calculate();
+        $breakdown      = $pricing->getBreakdown();
+
+        // Breakdown individual
+        $serviceFee = 2000 * $quantity;
+        $taxAmount  = $totalAmount - ($basePrice * $quantity) - $serviceFee;
+
+        // DB Transaction – simpan semua secara atomik
+        $transaction = DB::transaction(function () use (
+            $schedule, $seats, $quantity, $basePrice,
+            $serviceFee, $taxAmount, $totalAmount, $request
+        ) {
+            // Buat transaksi utama
             $transaction = Transaction::create([
-                'user_id' => auth()->id() ?? 1, // Fallback for testing/unauthenticated
+                'user_id'          => auth()->id() ?? 1,
                 'transaction_code' => 'TB-' . strtoupper(Str::random(10)),
-                'total_amount' => $totalAmount,
-                'service_fee' => $serviceFee,
-                'tax' => 0,
-                'discount' => 0,
-                'status' => 'pending', // Pending payment
+                'total_amount'     => $totalAmount,
+                'service_fee'      => $serviceFee,
+                'tax'              => $taxAmount,
+                'discount'         => 0,
+                'status'           => 'pending',
             ]);
 
-            // Create Tickets & Seat Reservations for each selected seat
-            foreach ($seats as $seat) {
-                $ticket = Ticket::create([
-                    'transaction_id' => $transaction->id,
-                    'schedule_id' => $schedule->id,
-                    'ticket_type' => 'Regular',
-                    'final_price' => $basePrice,
-                ]);
+            // Factory Pattern – buat tiket untuk setiap kursi
+            // Controller tidak tahu logika ticket_type, Factory yang memutuskan
+            TicketFactory::createForSeats($transaction, $schedule, $seats, $basePrice);
 
-                Reservation::create([
-                    'ticket_id' => $ticket->id,
-                    'seat_id' => $seat->id,
-                ]);
-            }
-
-            // Save the chosen payment method in the session temporarily for simulation purposes
+            // Simpan metode pembayaran di session untuk halaman simulasi
             session(['selected_payment_method_' . $transaction->id => $request->payment_method]);
 
             return $transaction;
         });
 
-        // Redirect to payment simulation page
         return redirect()->route('payment.show', $transaction);
     }
 }

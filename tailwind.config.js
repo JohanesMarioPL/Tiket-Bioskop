@@ -15,6 +15,11 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                cream:  '#FAF3E0',   // page background
+                blue:   '#CBDFEA',   // card background
+                gray:   '#C8C2BC',   // muted / borders
+                slate:  '#708090',   // secondary text
+                brown:  '#4B3935',   // headings / dark accents
                 sky: {
                     cream:  '#FAF3E0',   // page background
                     blue:   '#CBDFEA',   // card background
