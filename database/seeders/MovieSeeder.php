@@ -98,6 +98,14 @@ class MovieSeeder extends Seeder
                 'rating_age'       => 'SU',
                 'poster_url'       => 'posters/poster_spiderman.jpeg',
             ],
+            [
+                'title'            => 'The Avengers',
+                'description'      => 'Earth\'s mightiest heroes must come together...',
+                'genre'            => 'Action, Sci-Fi',
+                'duration_minutes' => 143,
+                'rating_age'       => 'R13',
+                'poster_url'       => 'posters/poster_avengers.jpeg',
+            ],
         ];
 
         foreach ($movies as $movie) {
