@@ -24,7 +24,7 @@ class AnalyticsController extends Controller
         $start = $hasDateFilter ? Carbon::parse($startDate)->startOfDay() : null;
         $end = $hasDateFilter ? Carbon::parse($endDate)->endOfDay() : null;
 
-        $querySukses = Transaction::where('status', 'success');
+        $querySukses = Transaction::where('status', 'paid');
         if ($hasDateFilter) {
             $querySukses->whereBetween('created_at', [$start, $end]);
         }
@@ -36,7 +36,7 @@ class AnalyticsController extends Controller
 
         $totalTiketTerjual = DB::table('tickets')
             ->join('transactions', 'tickets.transaction_id', '=', 'transactions.id')
-            ->where('transactions.status', 'success')
+            ->where('transactions.status', 'paid')
             ->when($hasDateFilter, function($q) use ($start, $end) {
                 return $q->whereBetween('transactions.created_at', [$start, $end]);
             })
@@ -46,15 +46,55 @@ class AnalyticsController extends Controller
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('SUM(total_amount) as revenue')
             )
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date', 'ASC');
 
         if (!$hasDateFilter) {
-            $chartQuery->where('created_at', '>=', Carbon::now()->subDays(30));
+            $latestTx = Transaction::where('status', 'paid')->latest()->first();
+            if ($latestTx) {
+                $latestDate = Carbon::parse($latestTx->created_at);
+                $chartQuery->where('created_at', '>=', $latestDate->copy()->subDays(30));
+            } else {
+                $chartQuery->where('created_at', '>=', Carbon::now()->subDays(30));
+            }
         }
-        $dailySales = $chartQuery->get();
+        $dailySalesRaw = $chartQuery->get();
 
-        $allMoviePerformance = DB::table('movies')
+        if ($hasDateFilter) {
+            $startDateObj = Carbon::parse($startDate);
+            $endDateObj = Carbon::parse($endDate);
+        } else {
+            $latestTx = Transaction::where('status', 'paid')->latest()->first();
+            if ($latestTx) {
+                $endDateObj = Carbon::parse($latestTx->created_at);
+                $startDateObj = $endDateObj->copy()->subDays(30);
+            } else {
+                $endDateObj = Carbon::now();
+                $startDateObj = $endDateObj->copy()->subDays(30);
+            }
+        }
+
+        if ($startDateObj->diffInDays($endDateObj) > 366) {
+            $startDateObj = $endDateObj->copy()->subDays(366);
+        }
+
+        $salesMap = $dailySalesRaw->pluck('revenue', 'date')->toArray();
+        $dailySales = collect();
+        $currentDate = $startDateObj->copy();
+
+        while ($currentDate->lte($endDateObj)) {
+            $dateStr = $currentDate->format('Y-m-d');
+            $revenue = $salesMap[$dateStr] ?? 0;
+            
+            $dailySales->push((object)[
+                'date' => $dateStr,
+                'revenue' => (float)$revenue
+            ]);
+            
+            $currentDate->addDay();
+        }
+
+        $allMoviePerformance = Movie::query()
             ->select(
                 'movies.id',
                 'movies.title',
@@ -66,7 +106,7 @@ class AnalyticsController extends Controller
             ->leftJoin('tickets', 'schedules.id', '=', 'tickets.schedule_id')
             ->leftJoin('transactions', function ($join) use ($hasDateFilter, $start, $end) {
                 $join->on('tickets.transaction_id', '=', 'transactions.id')
-                     ->where('transactions.status', '=', 'success');
+                     ->where('transactions.status', '=', 'paid');
                 if ($hasDateFilter) {
                     $join->whereBetween('transactions.created_at', [$start, $end]);
                 }
@@ -92,7 +132,7 @@ class AnalyticsController extends Controller
         $start = $hasDateFilter ? Carbon::parse($startDate)->startOfDay() : null;
         $end = $hasDateFilter ? Carbon::parse($endDate)->endOfDay() : null;
 
-        $querySukses = Transaction::with(['user', 'tickets'])->where('status', 'success');
+        $querySukses = Transaction::with(['user', 'tickets'])->where('status', 'paid');
         
         if ($hasDateFilter) {
             $querySukses->whereBetween('created_at', [$start, $end]);

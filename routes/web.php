@@ -17,11 +17,8 @@ use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController as AdminTransactionController;
 use App\Http\Controllers\User\ReviewController;
 
-Route::get('/', function () {
-    return view('layouts.starter');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
-Route::get('/user-dashboard', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 Route::get('/booking/{schedule}', [App\Http\Controllers\BookingController::class, 'show'])->name('booking.show');
@@ -32,7 +29,11 @@ Route::post('/payment/{transaction}', [App\Http\Controllers\PaymentController::c
 Route::get('/ticket/{transaction}', [App\Http\Controllers\TicketController::class, 'show'])->name('ticket.show');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $role = auth()->user()->role;
+    if ($role === 'admin') {
+        return redirect()->route('admin.analytics.index');
+    }
+    return redirect()->route('landing');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -1,24 +1,24 @@
 <div x-data="{ open: false }" class="relative">
     <button @click="open = !open" @click.away="open = false" class="flex items-center space-x-3 focus:outline-none group">
         <div class="text-right hidden md:block">
-            <p class="text-sm font-bold text-slate-800 group-hover:text-[#708090] transition-colors">
-                Jane Doe
+            <p class="text-sm font-bold text-[#FAF3E0] group-hover:text-[#CBDFEA] transition-colors">
+                {{ auth()->user()->name }}
             </p>
-            <p class="text-xs font-medium text-slate-500">
-                Admin
+            <p class="text-xs font-semibold text-[#FAF3E0]/70">
+                {{ ucfirst(auth()->user()->role) }}
             </p>
         </div>
         
         <div class="relative flex-shrink-0">
             <img 
-                class="w-10 h-10 rounded-full object-cover border-2 border-[#cbdfea] p-[2px] transition-transform group-hover:scale-105" 
-                src="https://ui-avatars.com/api/?name=Jane+Doe&background=344152&color=cbdfea" 
+                class="w-10 h-10 rounded-full object-cover border-2 border-[#CBDFEA] p-[2px] transition-transform group-hover:scale-105" 
+                src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=FAF3E0&color=4B3935" 
                 alt="Admin avatar" 
             />
-            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#4B3935] rounded-full"></div>
         </div>
 
-        <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-[#FAF3E0] transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg>
     </button>
@@ -38,12 +38,12 @@
             <p class="text-xs text-slate-400 uppercase font-semibold tracking-wider">Akun Saya</p>
         </div>
 
-        <a href="#" class="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-[#cbdfea]/30 hover:text-[#344152] transition-colors">
+        <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-[#CBDFEA]/30 hover:text-[#4B3935] transition-colors">
             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             Profil Detail
         </a>
 
-        <a href="{{ url('/') }}" class="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-[#cbdfea]/30 hover:text-[#344152] transition-colors">
+        <a href="{{ url('/') }}" class="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-[#CBDFEA]/30 hover:text-[#4B3935] transition-colors">
             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
             Lihat Sebagai Pembeli
         </a>

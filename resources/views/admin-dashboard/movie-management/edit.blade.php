@@ -16,7 +16,7 @@
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden" 
-         x-data="imagePreview('{{ $movie->poster_url ? asset('storage/' . $movie->poster_url) : '' }}')">
+         x-data="imagePreview('{{ $movie->getRawOriginal('poster_url') ? $movie->poster_url : '' }}')">
         
         <div class="p-6 lg:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
             <div>

@@ -14,11 +14,15 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id() ?? 1;
-        $movie = Movie::first();
-        $reviews = Review::where('movie_id', $movie->id)->latest()->get();
+        $movieId = $request->query('movie_id');
+        $movie = $movieId ? Movie::find($movieId) : null;
+        if (!$movie) {
+            $movie = Movie::first();
+        }
+        $reviews = $movie ? Review::where('movie_id', $movie->id)->latest()->get() : collect();
         
         return view('user-page.reviews.index', compact('reviews', 'movie'));
     }

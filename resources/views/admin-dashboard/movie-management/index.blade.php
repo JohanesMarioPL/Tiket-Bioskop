@@ -66,11 +66,7 @@
                             
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="w-16 h-24 bg-slate-200 rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow relative border border-slate-100">
-                                    @if($movie->poster_url)
-                                        <img src="{{ asset('storage/' . $movie->poster_url) }}" alt="{{ $movie->title }}" class="w-full h-full object-cover" />
-                                    @else
-                                        <div class="flex items-center justify-center w-full h-full bg-slate-200 text-slate-400 text-xs">No Img</div>
-                                    @endif
+                                    <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="w-full h-full object-cover" />
                                 </div>
                             </td>
 

@@ -36,6 +36,8 @@ class MovieController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        return view('movies.show', compact('movie', 'schedules'));
+        $reviews = $movie->reviews()->with('user')->latest()->get();
+
+        return view('movies.show', compact('movie', 'schedules', 'reviews'));
     }
 }
