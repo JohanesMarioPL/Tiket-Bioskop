@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manajemen Transaksi')
+@section('title', 'Transaksi')
 @section('header', 'Daftar Transaksi')
 
 @section('content')
@@ -21,7 +21,7 @@
     @endif
 
     <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Data Transaksi Tiket</h1>
+        <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Daftar Transaksi Penjualan Tiket</h1>
         
         <div class="flex gap-2 w-full sm:w-auto">
             <form action="{{ route('admin.transactions.index') }}" method="GET" class="flex gap-2 w-full sm:w-auto">
