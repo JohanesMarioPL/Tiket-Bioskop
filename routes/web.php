@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\Management\SeatsController;
 use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
+use App\Http\Controllers\Admin\Management\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\Management\TransactionController;
 use App\Http\Controllers\User\ReviewController;
 
@@ -20,6 +22,7 @@ Route::get('/', function () {
     return view('layouts.starter');
 });
 
+Route::get('/user-dashboard', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 
 Route::get('/dashboard', function () {
@@ -86,9 +89,9 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
     });
 
     Route::prefix('transactions')->name('transactions.')->group(function () {
-        Route::get('/', [TransactionController::class, 'index'])->name('index');
-        Route::get('/{transaction}', [TransactionController::class, 'show'])->name('show');
-        Route::post('/{transaction}', [TransactionController::class, 'update'])->name('update');
+        Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
+        Route::get('/{transaction}', [AdminTransactionController::class, 'show'])->name('show');
+        Route::post('/{transaction}', [AdminTransactionController::class, 'update'])->name('update');
     });
 
     Route::prefix('users')->name('users.')->group(function () {
