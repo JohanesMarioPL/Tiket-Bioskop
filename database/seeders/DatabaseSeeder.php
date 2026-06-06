@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,10 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory() removed — User model does not use HasFactory.
-        // Add manual user seeds here if needed:
-        // DB::table('users')->insert([...]);
-
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
@@ -31,7 +28,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => 'user',
         ]);
-        $this->call(MovieSeeder::class);
+
+        $this->call([
+            MovieSeeder::class,
+            ScheduleSeeder::class,
+            TransactionSeeder::class,
+        ]);
     }
 }
-

@@ -24,6 +24,13 @@ Route::get('/', function () {
 
 Route::get('/user-dashboard', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/booking/{schedule}', [App\Http\Controllers\BookingController::class, 'show'])->name('booking.show');
+Route::get('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/payment/{transaction}', [App\Http\Controllers\PaymentController::class, 'show'])->name('payment.show');
+Route::post('/payment/{transaction}', [App\Http\Controllers\PaymentController::class, 'simulate'])->name('payment.simulate');
+Route::get('/ticket/{transaction}', [App\Http\Controllers\TicketController::class, 'show'])->name('ticket.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
