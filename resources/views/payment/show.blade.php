@@ -130,8 +130,8 @@
                 <div class="flex flex-col items-center justify-center p-6 bg-white/40 rounded-2xl border border-slate-100 shadow-inner">
                     @if(in_array($paymentMethod, ['gopay', 'ovo', 'dana']))
                         <!-- Simulated QR Code -->
-                        <div class="qr-placeholder p-4 rounded-2xl w-44 h-44 shadow-lg border border-slate-200 flex items-center justify-center mb-4">
-                            <span class="text-sm font-bold text-slate-400 uppercase tracking-widest text-center">Tempat<br>QR Code</span>
+                        <div class="p-3 bg-white rounded-2xl w-44 h-44 shadow-lg border border-slate-200 flex items-center justify-center mb-4">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Pembayaran%20Berhasil" alt="QR Code Pembayaran Berhasil" class="w-full h-full object-contain">
                         </div>
                         <p class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Pindai QR Untuk Membayar</p>
                     @else

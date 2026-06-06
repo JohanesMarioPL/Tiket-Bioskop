@@ -16,7 +16,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Comedy',
                 'duration_minutes' => 96,
                 'rating_age'       => 'R13',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_legally-blonde.png',
             ],
             [
                 'title'            => 'Cruella',
@@ -24,7 +24,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Drama',
                 'duration_minutes' => 134,
                 'rating_age'       => 'R13',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_cruella.jpg',
             ],
             [
                 'title'            => 'Exhuma',
@@ -32,7 +32,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Horror',
                 'duration_minutes' => 134,
                 'rating_age'       => 'R17',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_exhuma.webp',
             ],
             [
                 'title'            => 'Tinggal Meninggal',
@@ -40,15 +40,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Comedy',
                 'duration_minutes' => 100,
                 'rating_age'       => 'R13',
-                'poster_url'       => null,
-            ],
-            [
-                'title'            => 'Batas Cakrawala',
-                'description'      => 'Kisah seorang pelaut yang berjuang melawan badai samudra dan keretakan rumah tangganya sekaligus. Drama manusia tentang pengorbanan dan harapan.',
-                'genre'            => 'Drama',
-                'duration_minutes' => 120,
-                'rating_age'       => 'R13',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_tinggal-meninggal.jpg',
             ],
             [
                 'title'            => 'Na Willa',
@@ -56,7 +48,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Drama',
                 'duration_minutes' => 118,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_na-willa.jpg',
             ],
             [
                 'title'            => "Dr. Seuss' the Lorax",
@@ -64,7 +56,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Comedy',
                 'duration_minutes' => 86,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_lorax.jpg',
             ],
             [
                 'title'            => 'Wonka',
@@ -72,7 +64,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Musical',
                 'duration_minutes' => 116,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_wonka.jpg',
             ],
             [
                 'title'            => 'Wicked',
@@ -80,7 +72,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Musical',
                 'duration_minutes' => 160,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_wicked.png',
             ],
             [
                 'title'            => 'The Book of Life',
@@ -88,7 +80,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Fantasy',
                 'duration_minutes' => 95,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_tbol.jpeg',
             ],
             [
                 'title'            => 'Barbie',
@@ -96,7 +88,7 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Comedy',
                 'duration_minutes' => 114,
                 'rating_age'       => 'R13',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_barbie.jpg',
             ],
             [
                 'title'            => 'Spider-Man: Across the Spider-Verse',
@@ -104,7 +96,15 @@ class MovieSeeder extends Seeder
                 'genre'            => 'Action',
                 'duration_minutes' => 140,
                 'rating_age'       => 'SU',
-                'poster_url'       => null,
+                'poster_url'       => 'posters/poster_spiderman.jpeg',
+            ],
+            [
+                'title'            => 'The Avengers',
+                'description'      => 'Earth\'s mightiest heroes must come together...',
+                'genre'            => 'Action, Sci-Fi',
+                'duration_minutes' => 143,
+                'rating_age'       => 'R13',
+                'poster_url'       => 'posters/poster_avengers.jpeg',
             ],
         ];
 

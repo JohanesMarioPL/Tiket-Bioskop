@@ -172,7 +172,7 @@
                     <div class="flex gap-4">
                         <div class="w-20 h-28 bg-slate-100 rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
                             @if($schedule->movie->poster_url)
-                                <img src="{{ $schedule->movie->poster_url }}" class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/' . $schedule->movie->poster_url) }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full bg-slate-200 flex items-center justify-center text-xs text-slate-400 font-bold">Poster</div>
                             @endif

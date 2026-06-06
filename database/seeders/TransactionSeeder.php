@@ -38,13 +38,17 @@ class TransactionSeeder extends Seeder
             'capacity' => 50
         ]);
 
-        $movie = Movie::create([
-            'title' => 'The Avengers',
-            'description' => 'Earth\'s mightiest heroes must come together...',
-            'genre' => 'Action, Sci-Fi',
-            'duration_minutes' => 143,
-            'rating_age' => 'R13'
-        ]);
+        $movie = Movie::where('title', 'The Avengers')->first();
+        if (!$movie) {
+            $movie = Movie::create([
+                'title' => 'The Avengers',
+                'description' => 'Earth\'s mightiest heroes must come together...',
+                'genre' => 'Action, Sci-Fi',
+                'duration_minutes' => 143,
+                'rating_age' => 'R13',
+                'poster_url' => 'posters/poster_avengers.jpeg'
+            ]);
+        }
 
         $schedule = Schedule::create([
             'movie_id' => $movie->id,

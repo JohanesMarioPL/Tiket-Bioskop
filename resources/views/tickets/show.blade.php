@@ -38,7 +38,7 @@
             border-radius: 50%;
             background-color: var(--cream);
             position: absolute;
-            top: 70%;
+            top: 50%;
             transform: translateY(-50%);
             z-index: 10;
         }
@@ -56,12 +56,8 @@
         }
 
         .ticket-divider {
-            position: absolute;
-            top: 70%;
-            left: 16px;
-            right: 16px;
+            width: 100%;
             border-top: 2px dashed rgba(52, 65, 82, 0.15);
-            transform: translateY(-50%);
         }
 
         @media print {
@@ -114,19 +110,14 @@
 
         <!-- Premium Ticket Card -->
         <div class="ticket-card overflow-hidden">
-            
-            <!-- Perforations -->
-            <div class="ticket-notch-left"></div>
-            <div class="ticket-notch-right"></div>
-            <div class="ticket-divider"></div>
 
             <!-- Upper Ticket Section (Show Info) -->
-            <div class="p-8 pb-10 space-y-6">
+            <div class="p-8 pb-6 space-y-6">
                 <!-- Movie Header -->
                 <div class="flex gap-4">
                     <div class="w-16 h-22 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/60 shadow-sm">
                         @if($transaction->tickets->first()->schedule->movie->poster_url ?? false)
-                            <img src="{{ $transaction->tickets->first()->schedule->movie->poster_url }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $transaction->tickets->first()->schedule->movie->poster_url) }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-[10px] text-slate-400 font-bold">Poster</div>
                         @endif
@@ -173,11 +164,18 @@
                 </div>
             </div>
 
+            <!-- Divider & Notches Row -->
+            <div class="relative flex items-center h-0">
+                <div class="ticket-notch-left"></div>
+                <div class="ticket-divider mx-4"></div>
+                <div class="ticket-notch-right"></div>
+            </div>
+
             <!-- Lower Ticket Section (QR Code / Validation) -->
-            <div class="p-8 pt-10 bg-slate-50/50 flex flex-col items-center justify-center text-center">
+            <div class="p-8 pt-6 bg-slate-50/50 flex flex-col items-center justify-center text-center">
                 <!-- Mock QR Code -->
                 <div class="p-3 bg-white rounded-2xl border border-slate-200/80 shadow-md w-36 h-36 flex items-center justify-center mb-4">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Tempat<br>QR Code</span>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Tiket%20berhasil%20di-scan" alt="QR Code Tiket Berhasil di-Scan" class="w-full h-full object-contain">
                 </div>
                 
                 <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Kode Transaksi</span>

@@ -235,20 +235,34 @@
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-200/60 pt-4 space-y-3 text-xs">
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Harga Tiket (x{{ $quantity }})</span>
-                            <span class="font-bold text-slate-800">Rp {{ number_format($schedule->base_price * $quantity, 0, ',', '.') }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-slate-500 font-medium">Biaya Layanan</span>
-                            <span class="font-bold text-slate-800">Rp {{ number_format($serviceFee, 0, ',', '.') }}</span>
-                        </div>
+
+                    {{-- Decorator Pattern – Tampilkan setiap lapisan harga secara dinamis --}}
+                    <div class="border-t border-slate-200/60 pt-4 space-y-2.5 text-xs">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Rincian Harga</p>
+                        @foreach($breakdown as $item)
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-500 font-medium flex items-center gap-1">
+                                    @if($item['type'] === 'base')
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>
+                                    @elseif($item['type'] === 'add')
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>
+                                    @else
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                                    @endif
+                                    {{ $item['label'] }}
+                                </span>
+                                <span class="font-bold {{ $item['type'] === 'subtract' ? 'text-emerald-600' : 'text-slate-800' }}">
+                                    {{ $item['type'] === 'subtract' ? '-' : '' }}Rp {{ number_format($item['amount'], 0, ',', '.') }}
+                                </span>
+                            </div>
+                        @endforeach
                         <div class="flex justify-between items-center pt-4 border-t border-dashed border-slate-200">
                             <span class="font-bold text-slate-800 text-sm">Total Pembayaran</span>
                             <span class="text-xl font-black text-slate-800">Rp {{ number_format($totalAmount, 0, ',', '.') }}</span>
                         </div>
                     </div>
+
+
 
                     <button 
                         type="button" 
