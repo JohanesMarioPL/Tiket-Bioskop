@@ -15,7 +15,6 @@ use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController as AdminTransactionController;
-use App\Http\Controllers\Admin\Management\TransactionController;
 use App\Http\Controllers\User\ReviewController;
 
 Route::get('/', function () {
