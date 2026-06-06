@@ -13,7 +13,7 @@ class TransactionController extends Controller
      */
     public function history()
     {
-        $transactions = Transaction::with(['tickets.schedule.movie', 'payment'])
+        $transactions = Transaction::with(['tickets.schedule.movie', 'tickets.schedule.studio.location', 'tickets.reservation.seat', 'payment'])
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
