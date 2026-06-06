@@ -16,7 +16,7 @@ class LandingPageController extends Controller
     {
         $topMovies = Movie::select('movies.*', DB::raw('COALESCE(SUM(tickets.final_price), 0) as total_pendapatan'))->join('schedules', 'movies.id', '=', 'schedules.movie_id')->leftJoin('tickets', 'schedules.id', '=', 'tickets.schedule_id')->leftJoin('transactions', function ($join) {
             $join->on('tickets.transaction_id', '=', 'transactions.id')
-                    ->where('transactions.status', '=', 'success');
+                    ->whereIn('transactions.status', ['paid', 'success']);
         })->where('schedules.start_time', '>=', Carbon::now())->groupBy('movies.id', 'movies.title', 'movies.description', 'movies.genre', 'movies.duration_minutes', 'movies.rating_age', 'movies.poster_url', 'movies.created_at', 'movies.updated_at')->orderByDesc('total_pendapatan')->with(['schedules' => function($q) {$q->where('start_time', '>=', Carbon::now())->with('studio.location');}])->take(5)->get();
 
         $randomBanners = Movie::whereHas('schedules', function ($q) {

@@ -15,6 +15,12 @@
     <div class="max-w-4xl mx-auto px-6 py-12 space-y-12">
         
         <div>
+            <a href="{{ route('transactions.history') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#4A3B32] opacity-70 hover:opacity-100 transition-opacity mb-6">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Kembali ke Riwayat Transaksi
+            </a>
             <h1 class="text-[28px] font-extrabold mb-2 text-[#4A3B32]">Ratings & Reviews</h1>
             <p class="text-sm font-medium opacity-70 text-[#4A3B32]">Bagikan pengalaman menontonmu untuk film ini.</p>
         </div>
@@ -24,7 +30,7 @@
             <div class="flex items-center gap-4 mb-6 pb-6 border-b border-[#8BA7B8]/30">
                 <div class="w-16 h-20 bg-[#C4CCD3] rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
                     @if($movie && $movie->poster_url)
-                        <img src="{{ asset('storage/' . $movie->poster_url) }}" class="w-full h-full object-cover">
+                        <img src="{{ $movie->poster_url }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center">
                             <svg class="w-8 h-8 text-white opacity-60" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h2v2H4zm0 5h2v2H4zm0 5h2v2H4zm16-10h-2v2h2zm0 5h-2v2h2zm0 5h-2v2h2zM8 4h8v16H8z"/></svg>

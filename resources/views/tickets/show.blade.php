@@ -117,7 +117,7 @@
                 <div class="flex gap-4">
                     <div class="w-16 h-22 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-200/60 shadow-sm">
                         @if($transaction->tickets->first()->schedule->movie->poster_url ?? false)
-                            <img src="{{ asset('storage/' . $transaction->tickets->first()->schedule->movie->poster_url) }}" class="w-full h-full object-cover">
+                            <img src="{{ $transaction->tickets->first()->schedule->movie->poster_url }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-[10px] text-slate-400 font-bold">Poster</div>
                         @endif

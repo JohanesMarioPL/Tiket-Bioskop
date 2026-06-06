@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Bioskop - @yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-50 font-sans antialiased text-slate-900">
+<body class="bg-[#FAF3E0] font-sans antialiased text-[#4B3935] text-sm">
     
-    <div class="flex h-screen bg-gray-50 overflow-hidden">
+    <div class="flex h-screen bg-[#FAF3E0] overflow-hidden">
         @include('components.admin.sidebar')
 
-        <div class="flex flex-col flex-1 w-full md:ml-64 transition-all">
+        <div class="flex flex-col flex-1 w-full md:ml-60 transition-all">
             
             @include('components.admin.navbar')
 
-            <main class="flex-1 overflow-y-auto p-6 lg:p-10 w-full">
+            <main class="flex-1 overflow-y-auto p-4 lg:p-6 w-full">
                 @yield('content')
             </main>
             

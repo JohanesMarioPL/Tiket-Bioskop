@@ -18,6 +18,11 @@ class Movie extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         if ($search) {
@@ -40,5 +45,13 @@ class Movie extends Model
             $query->where('rating_age', $rating);
         }
         return $query;
+    }
+
+    public function getPosterUrlAttribute($value)
+    {
+        if ($value && file_exists(public_path('storage/' . $value))) {
+            return asset('storage/' . $value);
+        }
+        return 'https://placehold.co/300x400/222432/FFFFFF?text=' . urlencode($this->title);
     }
 }

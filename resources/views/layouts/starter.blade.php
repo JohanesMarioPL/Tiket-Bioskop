@@ -57,7 +57,7 @@ https://templatemo.com/tm-570-chain-app-dev
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">
+            <a href="{{ route('landing') }}" class="logo">
               <img src="{{ asset('assets/images/logo.png') }}" alt="Chain App Dev">
             </a>
             <!-- ***** Logo End ***** -->
@@ -243,6 +243,15 @@ https://templatemo.com/tm-570-chain-app-dev
   <script src="{{ asset('assets/js/imagesloaded.js') }}"></script>
   <script src="{{ asset('assets/js/popup.js') }}"></script>
   <script src="{{ asset('assets/js/custom.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      @if(request()->is('register'))
+        $("#register_trigger").click();
+      @elseif(request()->is('login'))
+        $("#login_trigger").click();
+      @endif
+    });
+  </script>
 
   @yield('ExtraJS')
 </body>

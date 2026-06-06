@@ -96,9 +96,7 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-14 bg-slate-200 rounded overflow-hidden flex-shrink-0">
-                                        @if($schedule->movie->poster_url)
-                                            <img src="{{ asset('storage/' . $schedule->movie->poster_url) }}" alt="Poster" class="w-full h-full object-cover">
-                                        @endif
+                                        <img src="{{ $schedule->movie->poster_url }}" alt="Poster" class="w-full h-full object-cover">
                                     </div>
                                     <div>
                                         <div class="text-sm font-bold text-slate-900">{{ $schedule->movie->title }}</div>

@@ -1,6 +1,6 @@
-<nav class="bg-white px-6 py-4 lg:px-10 lg:py-5 w-full z-10 flex items-center justify-between border-b border-gray-200 shadow-sm transition-all">
+<nav class="bg-[#4B3935] px-5 py-3 lg:px-6 lg:py-3.5 w-full z-10 flex items-center justify-between border-b border-[#FAF3E0]/15 shadow-sm transition-all">
     
-    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">
+    <h2 class="text-lg lg:text-xl font-black text-[#FAF3E0] tracking-tight">
         @yield('header', 'Dashboard')
     </h2>
 
