@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Moderasi Ulasan')
-@section('header', 'Manajemen Ulasan')
+@section('title', 'Ulasan')
+@section('header', 'Ulasan Penonton')
 
 @section('content')
 <div class="relative">
@@ -21,7 +21,7 @@
     @endif
 
     <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Ulasan Pengguna</h1>
+        <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Ulasan Penonton</h1>
         
         <div class="flex gap-2 w-full sm:w-auto">
             <form action="{{ route('admin.reviews.index') }}" method="GET" class="flex gap-2 w-full sm:w-auto">
