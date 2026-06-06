@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController;
+use App\Http\Controllers\User\ReviewController;
 
 Route::get('/', function () {
     return view('layouts.starter');
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'history'])->name('transactions.history');
 });
 
+Route::get('/my-reviews', [ReviewController::class, 'index'])->name('user.reviews.index');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::prefix('admin-dashboard')->name('admin.')->group(function () {
     Route::get('/', [AnalyticsController::class, 'index'])->name('analytics.index');
     Route::get('/analytics/export', [AnalyticsController::class, 'exportPDF'])->name('analytics.export');
