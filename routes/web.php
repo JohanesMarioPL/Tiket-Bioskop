@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -14,11 +15,14 @@ use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
 use App\Http\Controllers\Admin\UserManagement\UserController;
 use App\Http\Controllers\Admin\Management\TransactionController as AdminTransactionController;
+use App\Http\Controllers\Admin\Management\TransactionController;
+use App\Http\Controllers\User\ReviewController;
 
 Route::get('/', function () {
     return view('layouts.starter');
 });
 
+Route::get('/user-dashboard', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 Route::get('/booking/{schedule}', [App\Http\Controllers\BookingController::class, 'show'])->name('booking.show');
@@ -40,8 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'history'])->name('transactions.history');
 });
 
+Route::get('/my-reviews', [ReviewController::class, 'index'])->name('user.reviews.index');
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::prefix('admin-dashboard')->name('admin.')->group(function () {
-    Route::get('/', [AnalyticsController::class, 'index'])->name('dashboard');
+    Route::get('/', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/export', [AnalyticsController::class, 'exportPDF'])->name('analytics.export');
 
     Route::prefix('movies')->name('movies.')->group(function () {
         Route::get('/', [MoviesController::class, 'index'])->name('index');
@@ -68,7 +75,7 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
         Route::delete('/{location}', [LocationController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('studios')->name('studios.')->group(function () {
+    Route::prefix('studio')->name('studio.')->group(function () {
         Route::get('/', [StudioController::class, 'index'])->name('index');
         Route::get('/create', [StudioController::class, 'create'])->name('create');
         Route::post('/', [StudioController::class, 'store'])->name('store');
@@ -76,16 +83,6 @@ Route::prefix('admin-dashboard')->name('admin.')->group(function () {
         Route::get('/{studio}/edit', [StudioController::class, 'edit'])->name('edit');
         Route::put('/{studio}', [StudioController::class, 'update'])->name('update');
         Route::delete('/{studio}', [StudioController::class, 'destroy'])->name('destroy');
-    });
-
-    Route::prefix('seats')->name('seats.')->group(function () {
-        Route::get('/', [SeatsController::class, 'index'])->name('index');
-        Route::get('/create', [SeatsController::class, 'create'])->name('create');
-        Route::post('/', [SeatsController::class, 'store'])->name('store');
-        Route::get('/{seat}', [SeatsController::class, 'show'])->name('show');
-        Route::get('/{seat}/edit', [SeatsController::class, 'edit'])->name('edit');
-        Route::put('/{seat}', [SeatsController::class, 'update'])->name('update');
-        Route::delete('/{seat}', [SeatsController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('showtimes')->name('showtimes.')->group(function () {

@@ -4,15 +4,130 @@ namespace App\Http\Controllers\Admin\Analytics;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
+use App\Models\Movie;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AnalyticsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        $hasDateFilter = $startDate && $endDate;
+        $start = $hasDateFilter ? Carbon::parse($startDate)->startOfDay() : null;
+        $end = $hasDateFilter ? Carbon::parse($endDate)->endOfDay() : null;
+
+        $querySukses = Transaction::where('status', 'success');
+        if ($hasDateFilter) {
+            $querySukses->whereBetween('created_at', [$start, $end]);
+        }
+
+        $totalRevenue = (clone $querySukses)->sum('total_amount');
+        $transaksiSukses = (clone $querySukses)->count();
+        
+        $pelanggan = (clone $querySukses)->distinct('user_id')->count('user_id');
+
+        $totalTiketTerjual = DB::table('tickets')
+            ->join('transactions', 'tickets.transaction_id', '=', 'transactions.id')
+            ->where('transactions.status', 'success')
+            ->when($hasDateFilter, function($q) use ($start, $end) {
+                return $q->whereBetween('transactions.created_at', [$start, $end]);
+            })
+            ->count();
+
+        $chartQuery = (clone $querySukses)->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('SUM(total_amount) as revenue')
+            )
+            ->groupBy('date')
+            ->orderBy('date', 'ASC');
+
+        if (!$hasDateFilter) {
+            $chartQuery->where('created_at', '>=', Carbon::now()->subDays(30));
+        }
+        $dailySales = $chartQuery->get();
+
+        $allMoviePerformance = DB::table('movies')
+            ->select(
+                'movies.id',
+                'movies.title',
+                'movies.poster_url',
+                DB::raw('COUNT(tickets.id) as total_tiket_terjual'),
+                DB::raw('COALESCE(SUM(tickets.final_price), 0) as total_pendapatan')
+            )
+            ->leftJoin('schedules', 'movies.id', '=', 'schedules.movie_id')
+            ->leftJoin('tickets', 'schedules.id', '=', 'tickets.schedule_id')
+            ->leftJoin('transactions', function ($join) use ($hasDateFilter, $start, $end) {
+                $join->on('tickets.transaction_id', '=', 'transactions.id')
+                     ->where('transactions.status', '=', 'success');
+                if ($hasDateFilter) {
+                    $join->whereBetween('transactions.created_at', [$start, $end]);
+                }
+            })
+            ->groupBy('movies.id', 'movies.title', 'movies.poster_url')
+            ->orderByDesc('total_pendapatan')
+            ->get();
+
+        $topMovies = $allMoviePerformance->take(3);
+
+        return view('admin-dashboard.analytics.index', compact(
+            'totalRevenue', 'totalTiketTerjual', 'transaksiSukses', 
+            'pelanggan', 'dailySales', 'allMoviePerformance', 'topMovies'
+        ));
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $hasDateFilter = $startDate && $endDate;
+        $start = $hasDateFilter ? Carbon::parse($startDate)->startOfDay() : null;
+        $end = $hasDateFilter ? Carbon::parse($endDate)->endOfDay() : null;
+
+        $querySukses = Transaction::with(['user', 'tickets'])->where('status', 'success');
+        
+        if ($hasDateFilter) {
+            $querySukses->whereBetween('created_at', [$start, $end]);
+        }
+
+        $transactions = $querySukses->latest()->get();
+
+        $totalRevenue = $transactions->sum('total_amount');
+        $transaksiSukses = $transactions->count();
+        $pelangganUnik = $transactions->pluck('user_id')->unique()->count();
+
+        $totalTiketTerjual = $transactions->sum(function($trx) {
+            return $trx->tickets->count();
+        });
+
+        if (!$hasDateFilter) {
+            $periodTitle = "Semua Waktu";
+            $periodRange = "Keseluruhan Data Sampai Saat Ini";
+            $fileNameDate = "All";
+        } else {
+            $periodTitle = "Kustom";
+            $periodRange = Carbon::parse($startDate)->format('d M Y') . ' s/d ' . Carbon::parse($endDate)->format('d M Y');
+            $fileNameDate = $startDate . '_to_' . $endDate;
+        }
+
+        $printDate = Carbon::now()->translatedFormat('l, d F Y');
+
+        $pdf = Pdf::loadView('admin-dashboard.analytics.export-pdf', compact(
+            'transactions', 'totalRevenue', 'totalTiketTerjual', 'transaksiSukses', 
+            'pelangganUnik', 'periodTitle', 'periodRange', 'printDate'
+        ));
+
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->download('Laporan_Bioskop_' . $fileNameDate . '.pdf');
     }
 
     /**
