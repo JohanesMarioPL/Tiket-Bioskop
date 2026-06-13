@@ -1,15 +1,17 @@
 <?php
 
 use App\Http\Controllers\LandingPageController;
+// use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Analytics\AnalyticsController;
-use App\Http\Controllers\Admin\Management\LocationController;
+use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\Admin\Management\MoviesController;
 use App\Http\Controllers\Admin\Management\ReviewsController;
 use App\Http\Controllers\Admin\Management\ScheduleController;
+use App\Http\Controllers\Admin\Management\LocationController;
 use App\Http\Controllers\Admin\Management\SeatsController;
 use App\Http\Controllers\Admin\Management\StudioController;
 use App\Http\Controllers\Admin\Management\TicketController;
@@ -21,6 +23,8 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/cinemas', [CinemaController::class, 'index'])->name('cinemas.index');
+Route::get('/cinemas/{id}', [CinemaController::class, 'show'])->name('cinemas.show');
 Route::get('/booking/{schedule}', [App\Http\Controllers\BookingController::class, 'show'])->name('booking.show');
 Route::get('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout/{schedule}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
