@@ -35,7 +35,9 @@
                 <div class="flex gap-6 text-sm font-bold text-[#FAF3E0]/80">
                     <a href="{{ route('landing') }}" class="hover:text-[#fadd39] transition-colors">Beranda</a>
                     <a href="{{ route('movies.index') }}" class="hover:text-[#fadd39] transition-colors">Film</a>
-                    <a href="#" class="hover:text-[#fadd39] transition-colors">Lokasi</a>
+                    
+                    <a href="{{ route('cinemas.index') }}" class="hover:text-[#fadd39] transition-colors">Bioskop</a>
+                    
                     @if(auth()->check())
                         <a href="{{ route('transactions.history') }}" class="hover:text-[#fadd39] transition-colors">Riwayat</a>
                     @endif
@@ -108,6 +110,9 @@
         <div class="flex flex-col gap-4 border-b border-[#FAF3E0]/10 pb-6 text-lg font-bold text-[#FAF3E0]/80">
             <a href="{{ route('landing') }}" class="hover:text-white">Beranda</a>
             <a href="{{ route('movies.index') }}" class="hover:text-white">Film</a>
+            
+            <a href="{{ route('cinemas.index') }}" class="hover:text-white">Bioskop</a>
+            
             @if(auth()->check())
                 <a href="{{ route('transactions.history') }}" class="hover:text-white">Riwayat</a>
             @endif
