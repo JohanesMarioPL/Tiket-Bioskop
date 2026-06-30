@@ -92,7 +92,7 @@ Aplikasi akan berjalan di **http://127.0.0.1:8000**
 
 ---
 
-## 👤 Daftar Akun yang Dapat Digunakan
+## Daftar Akun yang Dapat Digunakan
 
 > Semua akun menggunakan password yang sama: **`password`**
 
